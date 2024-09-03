@@ -8,7 +8,9 @@ minimap_renderer项目的web服务支持
 
 # 部署流程
 
-请吾
+LL bot请打开这个设置，NapChat如果运行有问题也请看看有没有类似设计
+
+![deed24829cb2739d7855fc3e29e1edde.png](temp%2Fdeed24829cb2739d7855fc3e29e1edde.png)
 
 首先 把 https://github.com/WoWs-Builder-Team/minimap_renderer 项目克隆到本地
 
