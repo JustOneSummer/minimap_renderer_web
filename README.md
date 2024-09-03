@@ -8,6 +8,10 @@ minimap_renderer项目的web服务支持
 
 # 部署流程
 
+go-cq-http 用户需要配置 ffmpeg 
+
+文档： https://docs.go-cqhttp.org/guide/quick_start.html#%E5%AE%89%E8%A3%85-ffmpeg
+
 LL bot请打开这个设置，NapChat如果运行有问题也请看看有没有类似设计
 
 ![deed24829cb2739d7855fc3e29e1edde.png](temp%2Fdeed24829cb2739d7855fc3e29e1edde.png)
@@ -38,3 +42,7 @@ src目录里面
 先执行 `安装依赖.bat` 然后执行 `运行.bat`
 
 如果是conda环境部署，请自行复制.bat文件的内容执行
+
+如果遇到`uvicorn`相关报错 请尝试执行这个命令
+
+`pip install uvicorn  http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com`

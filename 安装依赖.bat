@@ -4,3 +4,4 @@ pip install fastapi~=0.110.2 -i  http://mirrors.aliyun.com/pypi/simple --trusted
 
 pip install python-multipart~=0.0.9 -i  http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com
 
+pause
