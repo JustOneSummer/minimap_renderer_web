@@ -1,9 +1,9 @@
-pip install -r requirements.txt -i  http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com
+pip install -r requirements.txt -i  https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple some-package
 
-pip install fastapi -i  http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com
+pip install fastapi -i  https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple some-package
 
-pip install python-multipart -i  http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com
+pip install python-multipart -i  https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple some-package
 
-pip install uvicorn http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com
+pip install uvicorn https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple some-package
 
 pause

@@ -48,7 +48,3 @@ src目录里面
 `python.exe -m pip install --upgrade pip http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com`
 
 重新执行一次`安装依赖.bat`
-
-如果遇到`uvicorn`相关报错 请尝试执行以下命令
-
-`pip install uvicorn http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com`
