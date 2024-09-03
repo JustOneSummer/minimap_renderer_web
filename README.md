@@ -10,6 +10,8 @@ minimap_renderer项目的web服务支持
 
 # 部署流程
 
+LLOneBot插件版本必须大于等于 v3.31.6
+
 go-cq-http 用户需要配置 ffmpeg 
 
 文档： https://docs.go-cqhttp.org/guide/quick_start.html#%E5%AE%89%E8%A3%85-ffmpeg
