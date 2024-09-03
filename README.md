@@ -2,6 +2,8 @@
 
 minimap_renderer项目的web服务支持
 
+### 有问题请加群 967546463
+
 本项目为 https://github.com/benx1n/HikariBot 的扩展支持
 
 请先安装好python环境 python版本大于等于3.10
