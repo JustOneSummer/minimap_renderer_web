@@ -43,6 +43,12 @@ src目录里面
 
 如果是conda环境部署，请自行复制.bat文件的内容执行
 
-如果遇到`uvicorn`相关报错 请尝试执行这个命令
+安装依赖遇到报错请执行以下命令
 
-`pip install uvicorn  http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com`
+`python.exe -m pip install --upgrade pip http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com`
+
+重新执行一次`安装依赖.bat`
+
+如果遇到`uvicorn`相关报错 请尝试执行以下命令
+
+`pip install uvicorn http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com`
