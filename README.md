@@ -6,7 +6,7 @@
 
 安装git
 
-请先安装好python环境 python版本大于等于3.10
+安装python环境 python版本大于等于3.10
 
 `LLOneBot` 插件版本必须大于等于 `v3.31.6`
 
@@ -32,3 +32,5 @@ src目录里面
 
 
 如果是conda环境部署，请自行复制.bat文件的内容执行
+
+### 安装成功后HikariBot配置文件的`minimap_renderer_on`改为`true`
