@@ -1,5 +1,9 @@
 # `minimap_renderer` 项目的web服务支持
 
+### 更新请关注上游服务
+
+[点击跳转到小地图渲染项目](https://github.com/WoWs-Builder-Team/minimap_renderer)
+
 ### 有问题请加群 967546463
 
 # 安装前准备
