@@ -10,7 +10,7 @@
 
 安装git
 
-安装python环境 python版本大于等于3.10
+安装python环境 python版本3.10
 
 `LLOneBot` 插件版本必须大于等于 `v3.31.6`
 
