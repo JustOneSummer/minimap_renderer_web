@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>战舰世界 REP文件转换器</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #e6e6e6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #4cc9f0, #4361ee);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #b8b8b8;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .upload-section {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(30, 30, 46, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .video-section {
+            flex: 2;
+            min-width: 300px;
+            background: rgba(30, 30, 46, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #4cc9f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            font-size: 1.3rem;
+        }
+
+        .upload-area {
+            border: 3px dashed #4361ee;
+            border-radius: 10px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(67, 97, 238, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            background: rgba(67, 97, 238, 0.1);
+            border-color: #4cc9f0;
+        }
+
+        .upload-area i {
+            font-size: 4rem;
+            color: #4361ee;
+            margin-bottom: 15px;
+        }
+
+        .upload-area h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .upload-area p {
+            color: #b8b8b8;
+            margin-bottom: 15px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .selected-file {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            display: none;
+        }
+
+        .selected-file.show {
+            display: block;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .file-icon {
+            font-size: 2.5rem;
+            color: #4cc9f0;
+        }
+
+        .file-details h4 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .file-details p {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+        }
+
+        .upload-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, #4361ee, #3a0ca3);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            letter-spacing: 1px;
+        }
+
+        .upload-button:hover {
+            background: linear-gradient(90deg, #4cc9f0, #4361ee);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+        }
+
+        .upload-button:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .upload-button i {
+            margin-right: 10px;
+        }
+
+        .progress-container {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .progress-container.show {
+            display: block;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4cc9f0, #4361ee);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 5px;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #b8b8b8;
+        }
+
+        .video-container {
+            width: 100%;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            aspect-ratio: 16/9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .video-placeholder {
+            text-align: center;
+            color: #888;
+            padding: 40px;
+        }
+
+        .video-placeholder i {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .video-placeholder h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .video-player {
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        .video-player.show {
+            display: block;
+        }
+
+        .video-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .video-download-btn {
+            padding: 10px 20px;
+            background: linear-gradient(90deg, #f72585, #b5179e);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .video-download-btn:hover {
+            background: linear-gradient(90deg, #ff4d9e, #d434b8);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(247, 37, 133, 0.4);
+        }
+
+        .video-download-btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .status-message.show {
+            display: block;
+        }
+
+        .status-message.success {
+            background: rgba(46, 204, 113, 0.2);
+            border-left: 4px solid #2ecc71;
+            color: #2ecc71;
+        }
+
+        .status-message.error {
+            background: rgba(231, 76, 60, 0.2);
+            border-left: 4px solid #e74c3c;
+            color: #e74c3c;
+        }
+
+        .status-message.info {
+            background: rgba(52, 152, 219, 0.2);
+            border-left: 4px solid #3498db;
+            color: #3498db;
+        }
+
+        .instructions {
+            margin-top: 40px;
+            background: rgba(30, 30, 46, 0.8);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .instructions h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: #4cc9f0;
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+            color: #b8b8b8;
+        }
+
+        .instructions p {
+            color: #888;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .upload-section, .video-section {
+                padding: 20px;
+            }
+
+            .upload-area i {
+                font-size: 3rem;
+            }
+
+            .upload-area h3 {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 1.3rem;
+            }
+
+            .video-container {
+                aspect-ratio: 4/3;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .main-content {
+                gap: 20px;
+            }
+
+            .upload-area {
+                padding: 30px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-gamepad"></i> 战舰世界 wowsreplay文件转换器</h1>
+        <p>上传您的战舰世界 replay文件(.wowsreplay)，系统将自动解析并生成比赛视频，支持桌面端和移动端播放</p>
+    </div>
+
+    <div class="main-content">
+        <div class="upload-section">
+            <h2 class="section-title"><i class="fas fa-upload"></i> 上传REP文件</h2>
+
+            <div class="upload-area" id="uploadArea">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>点击或拖拽上传文件</h3>
+                <p>支持 .wowsreplay 文件格式</p>
+                <p>最大文件大小: 50MB</p>
+            </div>
+
+            <input type="file" id="fileInput" class="file-input" accept=".wowsreplay">
+
+            <div class="selected-file" id="selectedFile">
+                <div class="file-info">
+                    <div class="file-icon">
+                        <i class="fas fa-file-video"></i>
+                    </div>
+                    <div class="file-details">
+                        <h4 id="fileName">未选择文件</h4>
+                        <p id="fileSize">--</p>
+                    </div>
+                </div>
+            </div>
+
+            <button class="upload-button" id="uploadButton" disabled>
+                <i class="fas fa-video"></i> 转换并生成视频
+            </button>
+
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">准备上传...</div>
+            </div>
+
+            <div class="status-message" id="statusMessage"></div>
+        </div>
+
+        <div class="video-section">
+            <h2 class="section-title"><i class="fas fa-video"></i> 视频预览</h2>
+
+            <div class="video-container">
+                <div class="video-placeholder" id="videoPlaceholder">
+                    <i class="fas fa-film"></i>
+                    <h3>视频将在此处显示</h3>
+                    <p>上传并转换REP文件后，视频将自动播放</p>
+                </div>
+
+                <video class="video-player" id="videoPlayer" controls>
+                    <source src="" type="video/mp4">
+                    您的浏览器不支持视频播放。
+                </video>
+            </div>
+
+            <div class="video-controls">
+                <div class="video-info">
+                    <p id="videoInfo">等待视频生成...</p>
+                </div>
+                <a class="video-download-btn" id="downloadButton" disabled>
+                    <i class="fas fa-download"></i> 下载视频
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="instructions">
+        <h3><i class="fas fa-info-circle"></i> 使用说明</h3>
+        <ol>
+            <li>点击上方上传区域选择战舰世界的.wowsreplay文件，或直接拖拽文件到该区域</li>
+            <li>点击"转换并生成视频"按钮开始处理</li>
+            <li>等待系统解析REP文件并生成视频（处理时间取决于replay长度）</li>
+            <li>视频生成完成后将自动播放，您也可以下载到本地设备</li>
+            <li>重复上传相同文件将直接使用已生成的视频，无需重复处理</li>
+        </ol>
+        <p>注意：视频处理可能需要一些时间，请耐心等待。处理过程中请勿关闭页面。</p>
+    </div>
+</div>
+
+<script>
+    // DOM元素
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const selectedFile = document.getElementById('selectedFile');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+    const uploadButton = document.getElementById('uploadButton');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const statusMessage = document.getElementById('statusMessage');
+    const videoPlaceholder = document.getElementById('videoPlaceholder');
+    const videoPlayer = document.getElementById('videoPlayer');
+    const videoInfo = document.getElementById('videoInfo');
+    const downloadButton = document.getElementById('downloadButton');
+
+    // 当前选中的文件
+    let currentFile = null;
+
+    // 事件监听器 - 点击上传区域
+    uploadArea.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    // 事件监听器 - 拖拽上传
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#4cc9f0';
+        uploadArea.style.background = 'rgba(76, 201, 240, 0.1)';
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.style.borderColor = '#4361ee';
+        uploadArea.style.background = 'rgba(67, 97, 238, 0.05)';
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#4361ee';
+        uploadArea.style.background = 'rgba(67, 97, 238, 0.05)';
+
+        if (e.dataTransfer.files.length) {
+            handleFileSelection(e.dataTransfer.files[0]);
+        }
+    });
+
+    // 事件监听器 - 文件选择
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length) {
+            handleFileSelection(e.target.files[0]);
+        }
+    });
+
+    // 处理文件选择
+    function handleFileSelection(file) {
+        // 检查文件类型
+        if (!file.name.toLowerCase().endsWith('.wowsreplay')) {
+            showStatus('请选择有效的.wowsreplay文件', 'error');
+            return;
+        }
+
+        // 检查文件大小（限制为50MB）
+        if (file.size > 50 * 1024 * 1024) {
+            showStatus('文件大小超过50MB限制', 'error');
+            return;
+        }
+
+        currentFile = file;
+
+        // 显示文件信息
+        fileName.textContent = file.name;
+        fileSize.textContent = formatFileSize(file.size);
+        selectedFile.classList.add('show');
+
+        // 启用上传按钮
+        uploadButton.disabled = false;
+
+        // 重置视频区域
+        resetVideoPlayer();
+
+        showStatus('文件已选择，点击"转换并生成视频"按钮开始处理', 'info');
+    }
+
+    // 格式化文件大小
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    // 上传按钮点击事件
+    uploadButton.addEventListener('click', async () => {
+        if (!currentFile) return;
+
+        // 禁用上传按钮
+        uploadButton.disabled = true;
+        uploadButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 处理中...';
+
+        // 显示进度条
+        progressContainer.classList.add('show');
+        progressFill.style.width = '0%';
+        progressText.textContent = '准备上传...';
+
+        // 创建FormData对象
+        const formData = new FormData();
+        formData.append('file', currentFile);
+
+        // 模拟进度更新（实际应用中应由服务器发送进度事件）
+        simulateProgress();
+
+        try {
+            // 发送文件到后端API
+            // 注意：这里需要替换为您的实际API端点
+
+            const username = 'yuyuko';
+            const password = 'yuyuko';
+            const credentials = btoa(`${username}:${password}`);
+            const response = await fetch('http://127.0.0.1:9876/upload_replays_video', {
+                method: 'POST',
+                mode: 'cors',
+                body: formData,
+                headers: {
+                    // 如果需要认证，可以在这里添加token
+                    'Authorization': `Basic ${credentials}`,
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP错误: ${response.status}`);
+            }
+
+            // 获取视频数据
+            const videoBlob = await response.blob();
+
+            // 创建视频URL
+            const videoUrl = URL.createObjectURL(videoBlob);
+
+            // 设置视频源
+            videoPlayer.src = videoUrl;
+            videoPlayer.classList.add('show');
+            videoPlaceholder.style.display = 'none';
+
+            // 设置下载链接
+            downloadButton.href = videoUrl;
+            downloadButton.download = currentFile.name.replace('.wowsreplay', '.mp4');
+            downloadButton.disabled = false;
+
+            // 更新视频信息
+            videoInfo.textContent = `视频已生成: ${currentFile.name.replace('.wowsreplay', '.mp4')} (${formatFileSize(videoBlob.size)})`;
+
+            // 显示成功消息
+            showStatus('视频生成成功！现在可以播放或下载视频。', 'success');
+
+            // 模拟进度完成
+            progressFill.style.width = '100%';
+            progressText.textContent = '处理完成';
+
+        } catch (error) {
+            console.error('上传失败:', error);
+            showStatus(`处理失败: ${error.message}`, 'error');
+            progressFill.style.width = '0%';
+            progressText.textContent = '上传失败';
+
+            // 重新启用上传按钮
+            uploadButton.disabled = false;
+            uploadButton.innerHTML = '<i class="fas fa-video"></i> 转换并生成视频';
+        }
+    });
+
+    // 模拟进度更新（在实际应用中，您可以使用WebSocket或Server-Sent Events获取真实进度）
+    function simulateProgress() {
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.random() * 10;
+            if (progress >= 90) {
+                clearInterval(interval);
+                return;
+            }
+
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `处理中... ${Math.round(progress)}%`;
+        }, 500);
+    }
+
+    // 显示状态消息
+    function showStatus(message, type) {
+        statusMessage.textContent = message;
+        statusMessage.className = 'status-message show ' + type;
+
+        // 3秒后自动隐藏消息（错误消息不自动隐藏）
+        if (type !== 'error') {
+            setTimeout(() => {
+                statusMessage.classList.remove('show');
+            }, 5000);
+        }
+    }
+
+    // 重置视频播放器
+    function resetVideoPlayer() {
+        videoPlayer.src = '';
+        videoPlayer.classList.remove('show');
+        videoPlaceholder.style.display = 'flex';
+        downloadButton.href = '#';
+        downloadButton.disabled = true;
+        videoInfo.textContent = '等待视频生成...';
+    }
+
+    // 初始化
+    function init() {
+        showStatus('欢迎使用战舰世界 REP文件转换器！请上传.wowsreplay文件开始转换。', 'info');
+    }
+
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

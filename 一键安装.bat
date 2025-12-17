@@ -13,7 +13,7 @@ echo ========================================
 echo.
 
 :: 询问是否使用代理
-set /p USE_PROXY=是否使用代理下载？(y/n): 
+set /p USE_PROXY=是否使用代理下载？(y/n):
 if /i "%USE_PROXY%"=="y" goto SET_PROXY
 
 :: 不使用代理直接下载
@@ -23,7 +23,7 @@ goto DOWNLOAD
 
 :SET_PROXY
 echo.
-set /p PROXY_ADDRESS=请输入HTTP代理地址（格式: 地址:端口）: 
+set /p PROXY_ADDRESS=请输入HTTP代理地址（格式: 地址:端口）:
 
 if "%PROXY_ADDRESS%"=="" (
     echo 未输入代理地址，将不使用代理
