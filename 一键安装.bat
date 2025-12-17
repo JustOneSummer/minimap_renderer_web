@@ -3,10 +3,51 @@ chcp 65001
 python --version >nul 2>&1
 if errorlevel 1 goto errorNoPython
 
-echo 下载 minimap_renderer
-:: git clone https://gitee.com/yuyukosama/minimap_renderer.git
+
+title minimap_renderer 下载工具
+
+echo.
+echo ========================================
+echo     minimap_renderer 下载工具
+echo ========================================
+echo.
+
+:: 询问是否使用代理
+set /p USE_PROXY=是否使用代理下载？(y/n): 
+if /i "%USE_PROXY%"=="y" goto SET_PROXY
+
+:: 不使用代理直接下载
+echo.
+echo 不使用代理，开始下载...
+goto DOWNLOAD
+
+:SET_PROXY
+echo.
+set /p PROXY_ADDRESS=请输入HTTP代理地址（格式: 地址:端口）: 
+
+if "%PROXY_ADDRESS%"=="" (
+    echo 未输入代理地址，将不使用代理
+    goto DOWNLOAD
+)
+
+echo.
+echo 设置代理: http://%PROXY_ADDRESS%
+set http_proxy=http://%PROXY_ADDRESS%
+set https_proxy=http://%PROXY_ADDRESS%
+
+:DOWNLOAD
+echo.
+echo 开始下载 minimap_renderer...
+
+:
+echo 正在从Github克隆...
 git clone https://github.com/WoWs-Builder-Team/minimap_renderer.git
 if errorlevel 1 goto errorGit
+
+
+:: 清理代理设置
+set http_proxy=
+set https_proxy=
 
 set "source_file_token=token.json"
 set "source_file_render_web=src\render_web.py"
