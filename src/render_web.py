@@ -3,10 +3,12 @@ import io
 import json
 import os
 import secrets
+import patches
+
 from typing import Annotated
 
-from fastapi import FastAPI, UploadFile, Depends, HTTPException, status
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, UploadFile, Depends, HTTPException, status, Request
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -52,6 +54,13 @@ def get_current_username(
             headers={"WWW-Authenticate": "Basic"},
         )
     return credentials.username
+
+@app.get("/", response_class=HTMLResponse)
+async def read_root(request: Request):
+    # 读取 HTML 文件
+    with open("index.html", "r", encoding="utf-8") as f:
+        html_content = f.read()
+    return HTMLResponse(content=html_content)
 
 @app.post("/upload_replays_video", summary="上传rep文件返回视频流")
 async def upload_replays_video(file: UploadFile, username: Annotated[str, Depends(get_current_username)]):

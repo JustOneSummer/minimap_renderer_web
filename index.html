@@ -403,6 +403,52 @@
                 padding: 30px 15px;
             }
         }
+
+        .auth-inputs {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .input-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #b8b8b8;
+            font-size: 0.9rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #4361ee;
+            box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .auth-inputs {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .input-group {
+                min-width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -437,6 +483,16 @@
                 </div>
             </div>
 
+            <div class="auth-inputs">
+                <div class="input-group">
+                    <label for="username"><i class="fas fa-user"></i> 用户名</label>
+                    <input type="text" id="username" value="yuyuko" placeholder="请输入用户名">
+                </div>
+                <div class="input-group">
+                    <label for="password"><i class="fas fa-lock"></i> 密码</label>
+                    <input type="password" id="password" value="yuyuko" placeholder="请输入密码">
+                </div>
+            </div>
             <button class="upload-button" id="uploadButton" disabled>
                 <i class="fas fa-video"></i> 转换并生成视频
             </button>
@@ -602,16 +658,16 @@
         formData.append('file', currentFile);
 
         // 模拟进度更新（实际应用中应由服务器发送进度事件）
-        simulateProgress();
+        // simulateProgress();
 
         try {
             // 发送文件到后端API
             // 注意：这里需要替换为您的实际API端点
 
-            const username = 'yuyuko';
-            const password = 'yuyuko';
+            const username = document.getElementById('username').value.trim() || 'yuyuko';
+            const password = document.getElementById('password').value.trim() || 'yuyuko';
             const credentials = btoa(`${username}:${password}`);
-            const response = await fetch('http://127.0.0.1:9876/upload_replays_video', {
+            const response = await fetch('/upload_replays_video', {
                 method: 'POST',
                 mode: 'cors',
                 body: formData,
@@ -657,10 +713,10 @@
             progressFill.style.width = '0%';
             progressText.textContent = '上传失败';
 
-            // 重新启用上传按钮
-            uploadButton.disabled = false;
-            uploadButton.innerHTML = '<i class="fas fa-video"></i> 转换并生成视频';
         }
+        // 重新启用上传按钮
+        uploadButton.disabled = false;
+        uploadButton.innerHTML = '<i class="fas fa-video"></i> 转换并生成视频';
     });
 
     // 模拟进度更新（在实际应用中，您可以使用WebSocket或Server-Sent Events获取真实进度）
